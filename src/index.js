@@ -1,12 +1,12 @@
 // numbers is an array of numbers. Multiply all
 // numbers contained in array by multiplier
 function multiply(numbers, multiplier){
-  for(var i = 0; i < numbers.length; i++){
-    numbers[i] = numbers[i] * multiplier;
-  }
-
-  return numbers;
+  return numbers.map(i => {
+    return i * multiplier;
+  });
 }
+
+module.exports.multiply = multiply;
 
 // is an array of positive and negative numbers
 // make them all absolute numbers
