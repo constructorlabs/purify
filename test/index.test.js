@@ -86,6 +86,61 @@ test('Sorting strings by length did not change input array', function() {
 	expect(expected).toEqual(sortByLengthInput);
 });
 
+let lastTwoInput = [5,6,7,8,9];
+
+test('Get last two numbers from array', function() {
+	const expected = [8,9];
+	const result = functions.lastTwo(lastTwoInput);
+	expect(result).toEqual(expected);
+});
+
+test('Getting last two numbers from array did not change input array', function () {
+	const expected = [5,6,7,8,9];
+	expect(expected).toEqual(lastTwoInput);
+});
+
+let incrementYearInput= [
+	{
+		make: "Vauxhall",
+		model: "Astra",
+		year: 1992
+	},
+	{
+		make: "Ford",
+		model: "Mondeo",
+		year: 1999
+	},
+	{
+		make: "Toyota",
+		model: "Camry",
+		year: 2016
+	},
+];
+
+test('Increment car object year by one year', function() {
+	const expected =  [
+		{
+			make: "Vauxhall",
+			model: "Astra",
+			year: 1993
+		},
+		{
+			make: "Ford",
+			model: "Mondeo",
+			year: 2000
+		},
+		{
+			make: "Toyota",
+			model: "Camry",
+			year: 2017
+		},
+	];
+	const result = functions.incrementYear(incrementYearInput);
+	expect(result).toEqual(expected);
+})
+
+
+
 
 
 

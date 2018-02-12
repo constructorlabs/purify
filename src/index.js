@@ -58,8 +58,10 @@ module.exports.sortByLength = sortByLength;
 // numbers is an array of numbers. Get last two numbers
 // from numbers
 function lastTwo(numbers){
-  return numbers.splice(-2);
+  return numbers.slice(-2);
 }
+
+module.exports.lastTwo = lastTwo;
 
 // cars is an array of car objects which look like
 // this
@@ -70,11 +72,23 @@ function lastTwo(numbers){
 // }
 // increment the years by one year for all cars
 function incrementYear(cars){
-  for(var i = 0; i < cars.length; i++){
-    cars[i].year++;
-  }
-  return cars;
+  // for(var i = 0; i < cars.length; i++){
+  //   cars[i].year++;
+  // }
+  // return cars;
+
+  return cars.reduce((acc, item) => {
+    acc.push({
+      make : item.make,
+      model : item.model,
+      year : item.year + 1
+    });
+
+    return acc;
+  }, []);
 }
+
+module.exports.incrementYear = incrementYear;
 
 // sales is an object where the key is
 // the salespersons name and the value
