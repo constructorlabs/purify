@@ -62,3 +62,22 @@ test('Concatenating names did not change input array of objects', function() {
 	];
 	expect(expected).toEqual(concatNamesInput);
 });
+
+test('Convert numbers in array into strings', function() {
+	const expected = ['5','Edward','7'];
+	const result = functions.numbersToStrings([5,'Edward',7]);
+	expect(result).toEqual(expected);
+});
+
+let numbersToStringsInput = [5,'Edward',7];
+
+test('Changing numbers to strings did not change input array', function() {
+	const expected = [5,'Edward',7];
+	expect(expected).toEqual(numbersToStringsInput);
+});
+
+test('Sort strings by length', function() {
+	const expected = ['Hi','Hello','Goodbye'];
+	const result = functions.sortByLength(['Goodbye','Hi','Hello']);
+	expect(result).toEqual(expected);
+});

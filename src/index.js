@@ -37,17 +37,23 @@ module.exports.concatNames = concatNames;
 // things is an array of numbers and strings. Convert
 // numbers in array to strings. For example 5 to "5"
 function numbersToStrings(things){
-  for(var i = 0; i < things.length; i++){
-    things[i] = typeof things[i] === 'number' ? things[i]+'' : things[i];
-  }
+  return things.map( i => {
+    return i + '';
+  });
 }
+
+module.exports.numbersToStrings = numbersToStrings;
+
 
 // strings is an array of strings. sort them by length
 function sortByLength(strings){
-  strings.sort(function(a,b){
+  let sortedStrings = [...strings];
+  return sortedStrings.sort( (a, b) => {
     return a.length - b.length;
   });
 }
+
+module.exports.sortByLength = sortByLength;
 
 // numbers is an array of numbers. Get last two numbers
 // from numbers
