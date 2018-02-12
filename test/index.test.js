@@ -1,11 +1,6 @@
 const functions = require('../src/index');
 
-// test('Test', function(){
-// 	const expected = 1;
-// 	const result = functions.x(1);
-// 	expect(result).toBe(expected);
-// });
-
+/*
 test('Multiply with direct input', function() {
 	const expected = [2, 4, 6, 8];
 	const result = functions.multiply([1, 2, 3, 4], 2);
@@ -223,4 +218,80 @@ test('Create Date objects from array of strings', function() {
 test('Creating Date objects from array did not change input array', function() {
 	const expected = ['1980-05-29', '1985-01-02'];
 	expect(expected).toEqual(parseDateInput);
+});
+
+*/
+
+const prices = [8, 25, 10, 14, 5, 16, 12, 3, 7, 4, 21, 11, 2, 6, 18];
+const range1 = [3, 5];
+const range2 = [10, 11];
+const range3 = [1, 12];
+
+const ranges = [range1, range2, range3];
+
+test('Extract ranges', function() {
+	const expected = [21, 11];
+	const result = functions.extractRange(prices, range2);
+	expect(result).toEqual(expected);
+});
+
+const arrayInputForMulti = [1.2, 3.4, 5.6];
+
+test('Sum of array', function() {
+	const expected = 10.2;
+	const result = functions.sumArray(arrayInputForMulti);
+	expect(result).toBe(expected);
+})
+
+test('Mean of array to 2 decimal places', function() {
+	const expected = 3.40;
+	const result = functions.meanArray(arrayInputForMulti);
+	expect(result).toBe(expected);
+});
+
+test('Variance', function() {
+	const expected = 3.23;
+	const result = functions.variance(arrayInputForMulti);
+	expect(result).toBe(expected);
+})
+
+test('Standard deviation', function() {
+	const expected = 1.80;
+	const result = functions.stdDeviation(arrayInputForMulti);
+	expect(result).toBe(expected);
+})
+
+const statisticsOutputWanted = [
+	{
+		count: 3,
+		total: 35,
+		min: 5,
+		max: 16,
+		mean: 11.67,
+		variance: 22.89,
+		stdDeviation: 4.78
+	},
+	{
+		count: 2,
+		total: 32,
+		min: 11,
+		max: 21,
+		mean: 16,
+		variance: 25,
+		stdDeviation: 5
+	},
+	{
+		count: 12,
+		total: 130,
+		min: 2,
+		max: 25,
+		mean: 10.83,
+		variance: 48.14,
+		stdDeviation: 6.94
+	}
+];
+
+test('Price array statistics', function() {
+	const result = functions.priceArrayStatistics(prices, ranges);
+	expect(result).toEqual(statisticsOutputWanted);
 });

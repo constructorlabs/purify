@@ -163,9 +163,9 @@ module.exports.parseDates = parseDates;
 
 // Stretch goal
 
-// write a function stats it should accept 2 parameters
-// 1. A prices array which contains and array of prices
-// [8, 9, 10, 4]
+// Write a function stats. It should accept 2 parameters:
+// 1. A prices array which contains an array of prices
+// [8, 25, 10, 14, 5, 14, 12, 3, 7, 4, 21, 11, 2, 6, 18]
 // 2. An array of arrays where the inner array contains
 // start and end indexes for which we want to calculate
 // stats. The second index should always be greater or equal
@@ -173,7 +173,7 @@ module.exports.parseDates = parseDates;
 // [ [0, 7], [1, 4], [3, 10] ]
 
 // The function should output an array of objects which
-// contain statistics calculated for each a set of prices
+// contain statistics calculated for each set of prices
 // as indicated by the corresponding array of indexes.
 
 // [{
@@ -181,11 +181,75 @@ module.exports.parseDates = parseDates;
 //   total: 57,
 //   min: 4,
 //   max: 9,
-//   mean: "5.70" <- mean should be have 2 decimal places
-//   variance: "3.63", <- variance should be have 2 decimal places
-//   stdDeviation: "1.84" <- standard deviation should be have 2 decimal places
+//   mean: "5.70" <- mean should have 2 decimal places
+//   variance: "3.63", <- variance should have 2 decimal places
+//   stdDeviation: "1.84" <- standard deviation should have 2 decimal places
 // }]
 
 // Implement a solution using multiple pure functions
 
 // Write a unit test for each function
+
+function extractRange (targetArray, range) {
+  return targetArray.slice(range[0], range[1]+1);
+}
+
+module.exports.extractRange = extractRange;
+
+function sumArray (array) {
+  return array.reduce((acc, item) => {
+    return acc + item;
+  }, 0);
+}
+
+module.exports.sumArray = sumArray;
+
+function meanArray (array) {
+  return Number((sumArray(array) / array.length).toFixed(2));
+}
+
+module.exports.meanArray = meanArray;
+
+function variance (array) {
+  let mean = meanArray(array);
+
+  let sqDiffs = array.reduce((acc, val) => {
+    let diff = val - mean;
+    acc.push(Math.pow(diff, 2));
+    return acc;
+  }, []);
+
+  return meanArray(sqDiffs);
+}
+
+module.exports.variance = variance;
+
+function stdDeviation (array) {
+  return Number((Math.sqrt(variance(array))).toFixed(2));
+}
+
+module.exports.stdDeviation = stdDeviation;
+
+function priceArrayStatistics (prices, ranges) {
+  let priceRanges = ranges.map( range => {
+    return extractRange(prices, range);
+  });
+
+  let output = [];
+
+  priceRanges.forEach(rangeToAnalyse => {
+    output.push({
+      count : rangeToAnalyse.length,
+      total : sumArray(rangeToAnalyse),
+      min : Math.min(...rangeToAnalyse),
+      max : Math.max(...rangeToAnalyse),
+      mean: meanArray(rangeToAnalyse),
+      variance : variance(rangeToAnalyse),
+      stdDeviation : stdDeviation(rangeToAnalyse),
+    });
+  });
+
+  return output;
+}
+
+module.exports.priceArrayStatistics = priceArrayStatistics;
