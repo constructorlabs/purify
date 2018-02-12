@@ -11,10 +11,13 @@ module.exports.multiply = multiply;
 // is an array of positive and negative numbers
 // make them all absolute numbers
 function absolute(numbers){
-  for(var i = 0; i < numbers.length; i++){
-    numbers[i] = +numbers[i];
-  }
+  return numbers.map(i => {
+    return Math.abs(i);
+  })
 }
+
+module.exports.absolute = absolute;
+
 // names is an array of name of nameObjects
 // {
 //   firstName: 'Alan',
@@ -23,11 +26,13 @@ function absolute(numbers){
 // concatenate first and last names and return
 // resulting array of names
 function concatNames(names){
-  for(var i = 0; i < names.length; i++){
-    names[i] = `${names[i].firstName} ${names[i].lastName}`;
-  }
-  return names;
+  return names.reduce((acc, name) => {
+    acc.push(`${name.firstName} ${name.lastName}`);
+    return acc;
+  }, []);
 }
+
+module.exports.concatNames = concatNames;
 
 // things is an array of numbers and strings. Convert
 // numbers in array to strings. For example 5 to "5"

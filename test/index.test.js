@@ -12,7 +12,7 @@ test('Multiply with direct input', function() {
 	expect(result).toEqual(expected);
 });
 
-const multiplyInput = [1, 2, 3, 4];
+let multiplyInput = [1, 2, 3, 4];
 
 test('Multiply with array input', function() {
 	const expected = [2, 4, 6, 8];
@@ -25,3 +25,40 @@ test('Multiply did not change input array', function() {
 	expect(expected).toEqual(multiplyInput);
 });
 
+test('Make numbers in array absolute', function() {
+	const expected = [1, 2, 3, 4];
+	const result = functions.absolute([-1, 2, -3, 4]);
+	expect(result).toEqual(expected);
+});
+
+let absoluteInput = [-1, 2, -3, 4]
+
+test('Absolute did not change input array', function() {
+	const expected = [-1, 2, -3, 4];
+	expect(expected).toEqual(absoluteInput);
+});
+
+test('Return array of concatenated names from object array', function() {
+	const expected = ['Ben Smith', 'James Bond', 'Sam Black'];
+	const result = functions.concatNames([
+		{ firstName : 'Ben', lastName : 'Smith' },
+		{ firstName : 'James', lastName : 'Bond' },
+		{ firstName : 'Sam', lastName : 'Black' }
+	]);
+	expect(result).toEqual(expected);
+});
+
+let concatNamesInput = [
+	{ firstName : 'Ben', lastName : 'Smith' },
+	{ firstName : 'James', lastName : 'Bond' },
+	{ firstName : 'Sam', lastName : 'Black' }
+];
+
+test('Concatenating names did not change input array of objects', function() {
+	const expected = [
+		{ firstName : 'Ben', lastName : 'Smith' },
+		{ firstName : 'James', lastName : 'Bond' },
+		{ firstName : 'Sam', lastName : 'Black' }
+	];
+	expect(expected).toEqual(concatNamesInput);
+});
