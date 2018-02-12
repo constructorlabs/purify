@@ -72,11 +72,6 @@ module.exports.lastTwo = lastTwo;
 // }
 // increment the years by one year for all cars
 function incrementYear(cars){
-  // for(var i = 0; i < cars.length; i++){
-  //   cars[i].year++;
-  // }
-  // return cars;
-
   return cars.reduce((acc, item) => {
     acc.push({
       make : item.make,
@@ -100,16 +95,19 @@ module.exports.incrementYear = incrementYear;
 //   Dave: [43, 2, 12]
 // }
 function totalSales( sales ){
-  Object.keys(sales).forEach(function(key){
-    let total = 0;
+  let newSales = JSON.parse(JSON.stringify(sales));
 
-    for(var i = 0; i < sales[key].length; i++){
-      total = total + sales[key][i];
-    }
+  for (const [salesPerson, saleValues] of Object.entries(newSales)) {
+    newSales[salesPerson] = saleValues.reduce((acc, value) => {
+      return acc + value;
+    });
+  }
 
-    sales[key] = total;
-  });
+  return newSales;
 }
+
+module.exports.totalSales = totalSales;
+
 // stuff is an object with string keys and
 // string values. All keys and values are unique
 // Swap keys and values around, so that keys
@@ -119,33 +117,49 @@ function totalSales( sales ){
 //   c: 'd'
 // }
 function swapKeysAndValues(stuff){
-  Object.keys(stuff).forEach(function(key){
-    const value = stuff[key];
-    stuff[value] = key;
-    delete stuff[key];
-  });
+  let newStuff = JSON.parse(JSON.stringify(stuff));
 
-  return stuff;
+  for (const [oldKey, oldVal] of Object.entries(newStuff)) {
+    newStuff[oldVal] = oldKey;
+    delete newStuff[oldKey];
+  }
+
+  return newStuff;
 }
 
+module.exports.swapKeysAndValues = swapKeysAndValues;
+
 // dates is an array of dates in string format
-// 'yyyy-mm-dd' convert dates to date object.
+// 'yyyy-mm-dd' convert dates to Date object.
 // For example, '2018-02-12' is 12th Feb 2018
 
 // Hint: this function has a bug that needs fixing
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
 function parseDates(dates){
-  for(var i = 0; i < dates.length; i++){
-    var dateParts = dates[i].split('-');
+  // for(var i = 0; i < dates.length; i++){
+  //   var dateParts = dates[i].split('-');
+
+  //   var year = parseInt(dateParts[0]);
+  //   var month = parseInt(dateParts[1]);
+  //   var date = parseInt(dateParts[2]);
+
+  //   dates[i] = new Date(year, month, date);
+  // }
+  // return dates;
+
+  return dates.map( date => {
+    var dateParts = date.split('-');
 
     var year = parseInt(dateParts[0]);
-    var month = parseInt(dateParts[1]);
+    var month = parseInt(dateParts[1]) - 1;
     var date = parseInt(dateParts[2]);
 
-    dates[i] = new Date(year, month, date);
-  }
-  return dates;
+    return new Date(year, month, date);
+  });
+
 }
+
+module.exports.parseDates = parseDates;
 
 // Stretch goal
 
