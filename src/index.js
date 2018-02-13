@@ -1,20 +1,23 @@
 // numbers is an array of numbers. Multiply all
 // numbers contained in array by multiplier
 function multiply(numbers, multiplier){
-  for(var i = 0; i < numbers.length; i++){
-    numbers[i] = numbers[i] * multiplier;
-  }
-
-  return numbers;
+  return numbers.map(i => {
+    return i * multiplier;
+  });
 }
+
+module.exports.multiply = multiply;
 
 // is an array of positive and negative numbers
 // make them all absolute numbers
 function absolute(numbers){
-  for(var i = 0; i < numbers.length; i++){
-    numbers[i] = +numbers[i];
-  }
+  return numbers.map(i => {
+    return Math.abs(i);
+  })
 }
+
+module.exports.absolute = absolute;
+
 // names is an array of name of nameObjects
 // {
 //   firstName: 'Alan',
@@ -23,32 +26,42 @@ function absolute(numbers){
 // concatenate first and last names and return
 // resulting array of names
 function concatNames(names){
-  for(var i = 0; i < names.length; i++){
-    names[i] = `${names[i].firstName} ${names[i].lastName}`;
-  }
-  return names;
+  return names.reduce((acc, name) => {
+    acc.push(`${name.firstName} ${name.lastName}`);
+    return acc;
+  }, []);
 }
+
+module.exports.concatNames = concatNames;
 
 // things is an array of numbers and strings. Convert
 // numbers in array to strings. For example 5 to "5"
 function numbersToStrings(things){
-  for(var i = 0; i < things.length; i++){
-    things[i] = typeof things[i] === 'number' ? things[i]+'' : things[i];
-  }
+  return things.map( i => {
+    return i + '';
+  });
 }
+
+module.exports.numbersToStrings = numbersToStrings;
+
 
 // strings is an array of strings. sort them by length
 function sortByLength(strings){
-  strings.sort(function(a,b){
+  let sortedStrings = [...strings];
+  return sortedStrings.sort( (a, b) => {
     return a.length - b.length;
   });
 }
 
+module.exports.sortByLength = sortByLength;
+
 // numbers is an array of numbers. Get last two numbers
 // from numbers
 function lastTwo(numbers){
-  return numbers.splice(-2);
+  return numbers.slice(-2);
 }
+
+module.exports.lastTwo = lastTwo;
 
 // cars is an array of car objects which look like
 // this
@@ -59,11 +72,18 @@ function lastTwo(numbers){
 // }
 // increment the years by one year for all cars
 function incrementYear(cars){
-  for(var i = 0; i < cars.length; i++){
-    cars[i].year++;
-  }
-  return cars;
+  return cars.reduce((acc, item) => {
+    acc.push({
+      make : item.make,
+      model : item.model,
+      year : item.year + 1
+    });
+
+    return acc;
+  }, []);
 }
+
+module.exports.incrementYear = incrementYear;
 
 // sales is an object where the key is
 // the salespersons name and the value
@@ -75,16 +95,19 @@ function incrementYear(cars){
 //   Dave: [43, 2, 12]
 // }
 function totalSales( sales ){
-  Object.keys(sales).forEach(function(key){
-    let total = 0;
+  let newSales = JSON.parse(JSON.stringify(sales));
 
-    for(var i = 0; i < sales[key].length; i++){
-      total = total + sales[key][i];
-    }
+  for (const [salesPerson, saleValues] of Object.entries(newSales)) {
+    newSales[salesPerson] = saleValues.reduce((acc, value) => {
+      return acc + value;
+    });
+  }
 
-    sales[key] = total;
-  });
+  return newSales;
 }
+
+module.exports.totalSales = totalSales;
+
 // stuff is an object with string keys and
 // string values. All keys and values are unique
 // Swap keys and values around, so that keys
@@ -94,39 +117,55 @@ function totalSales( sales ){
 //   c: 'd'
 // }
 function swapKeysAndValues(stuff){
-  Object.keys(stuff).forEach(function(key){
-    const value = stuff[key];
-    stuff[value] = key;
-    delete stuff[key];
-  });
+  let newStuff = JSON.parse(JSON.stringify(stuff));
 
-  return stuff;
+  for (const [oldKey, oldVal] of Object.entries(newStuff)) {
+    newStuff[oldVal] = oldKey;
+    delete newStuff[oldKey];
+  }
+
+  return newStuff;
 }
 
+module.exports.swapKeysAndValues = swapKeysAndValues;
+
 // dates is an array of dates in string format
-// 'yyyy-mm-dd' convert dates to date object.
+// 'yyyy-mm-dd' convert dates to Date object.
 // For example, '2018-02-12' is 12th Feb 2018
 
 // Hint: this function has a bug that needs fixing
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
 function parseDates(dates){
-  for(var i = 0; i < dates.length; i++){
-    var dateParts = dates[i].split('-');
+  // for(var i = 0; i < dates.length; i++){
+  //   var dateParts = dates[i].split('-');
+
+  //   var year = parseInt(dateParts[0]);
+  //   var month = parseInt(dateParts[1]);
+  //   var date = parseInt(dateParts[2]);
+
+  //   dates[i] = new Date(year, month, date);
+  // }
+  // return dates;
+
+  return dates.map( date => {
+    var dateParts = date.split('-');
 
     var year = parseInt(dateParts[0]);
-    var month = parseInt(dateParts[1]);
+    var month = parseInt(dateParts[1]) - 1;
     var date = parseInt(dateParts[2]);
 
-    dates[i] = new Date(year, month, date);
-  }
-  return dates;
+    return new Date(year, month, date);
+  });
+
 }
+
+module.exports.parseDates = parseDates;
 
 // Stretch goal
 
-// write a function stats it should accept 2 parameters
-// 1. A prices array which contains and array of prices
-// [8, 9, 10, 4]
+// Write a function stats. It should accept 2 parameters:
+// 1. A prices array which contains an array of prices
+// [8, 25, 10, 14, 5, 14, 12, 3, 7, 4, 21, 11, 2, 6, 18]
 // 2. An array of arrays where the inner array contains
 // start and end indexes for which we want to calculate
 // stats. The second index should always be greater or equal
@@ -134,7 +173,7 @@ function parseDates(dates){
 // [ [0, 7], [1, 4], [3, 10] ]
 
 // The function should output an array of objects which
-// contain statistics calculated for each a set of prices
+// contain statistics calculated for each set of prices
 // as indicated by the corresponding array of indexes.
 
 // [{
@@ -142,11 +181,75 @@ function parseDates(dates){
 //   total: 57,
 //   min: 4,
 //   max: 9,
-//   mean: "5.70" <- mean should be have 2 decimal places
-//   variance: "3.63", <- variance should be have 2 decimal places
-//   stdDeviation: "1.84" <- standard deviation should be have 2 decimal places
+//   mean: "5.70" <- mean should have 2 decimal places
+//   variance: "3.63", <- variance should have 2 decimal places
+//   stdDeviation: "1.84" <- standard deviation should have 2 decimal places
 // }]
 
 // Implement a solution using multiple pure functions
 
 // Write a unit test for each function
+
+function extractRange (targetArray, range) {
+  return targetArray.slice(range[0], range[1]+1);
+}
+
+module.exports.extractRange = extractRange;
+
+function sumArray (array) {
+  return array.reduce((acc, item) => {
+    return acc + item;
+  }, 0);
+}
+
+module.exports.sumArray = sumArray;
+
+function meanArray (array) {
+  return Number((sumArray(array) / array.length).toFixed(2));
+}
+
+module.exports.meanArray = meanArray;
+
+function variance (array) {
+  let mean = meanArray(array);
+
+  let sqDiffs = array.reduce((acc, val) => {
+    let diff = val - mean;
+    acc.push(Math.pow(diff, 2));
+    return acc;
+  }, []);
+
+  return meanArray(sqDiffs);
+}
+
+module.exports.variance = variance;
+
+function stdDeviation (array) {
+  return Number((Math.sqrt(variance(array))).toFixed(2));
+}
+
+module.exports.stdDeviation = stdDeviation;
+
+function priceArrayStatistics (prices, ranges) {
+  let priceRanges = ranges.map( range => {
+    return extractRange(prices, range);
+  });
+
+  let output = [];
+
+  priceRanges.forEach(rangeToAnalyse => {
+    output.push({
+      count : rangeToAnalyse.length,
+      total : sumArray(rangeToAnalyse),
+      min : Math.min(...rangeToAnalyse),
+      max : Math.max(...rangeToAnalyse),
+      mean: meanArray(rangeToAnalyse),
+      variance : variance(rangeToAnalyse),
+      stdDeviation : stdDeviation(rangeToAnalyse),
+    });
+  });
+
+  return output;
+}
+
+module.exports.priceArrayStatistics = priceArrayStatistics;
