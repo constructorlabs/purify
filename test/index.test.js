@@ -132,7 +132,7 @@ test.only("parseDates", function() {
   const input = ["2018-02-12", "1993-06-05", "1955-08-12"];
   const inputCopy = ["2018-02-12", "1993-06-05", "1955-08-12"];
   const result = functions.parseDates(input);
-  const expected = ["12th Feb 2018", "5th Jun 1993", "12th Aug 1955"];
+  const expected = [new Date("2018-02-12")];
   expect(result).toEqual(expected);
   expect(input).toEqual(inputCopy);
 });
