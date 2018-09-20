@@ -1,20 +1,15 @@
 // numbers is an array of numbers. Multiply all
 // numbers contained in array by multiplier
 function multiply(numbers, multiplier){
-  for(var i = 0; i < numbers.length; i++){
-    numbers[i] = numbers[i] * multiplier;
-  }
-
-  return numbers;
+  return numbers.map(item => item*multiplier);
 }
 
 // is an array of positive and negative numbers
 // make them all absolute numbers
 function absolute(numbers){
-  for(var i = 0; i < numbers.length; i++){
-    numbers[i] = +numbers[i];
-  }
+ return numbers.map(number => Math.abs(number));
 }
+
 // names is an array of name of nameObjects
 // {
 //   firstName: 'Alan',
@@ -23,31 +18,27 @@ function absolute(numbers){
 // concatenate first and last names and return
 // resulting array of names
 function concatNames(names){
-  for(var i = 0; i < names.length; i++){
-    names[i] = `${names[i].firstName} ${names[i].lastName}`;
-  }
-  return names;
+  return names.map(item => `${item.firstName} ${item.lastName}`);
 }
 
 // things is an array of numbers and strings. Convert
 // numbers in array to strings. For example 5 to "5"
 function numbersToStrings(things){
-  for(var i = 0; i < things.length; i++){
-    things[i] = typeof things[i] === 'number' ? things[i]+'' : things[i];
-  }
+ return things.map(item => item.toString());
 }
 
 // strings is an array of strings. sort them by length
 function sortByLength(strings){
-  strings.sort(function(a,b){
-    return a.length - b.length;
-  });
+  const newArr = [...strings];
+  newArr.sort((a,b) => a.length - b.length);
+  return newArr;
 }
 
 // numbers is an array of numbers. Get last two numbers
 // from numbers
 function lastTwo(numbers){
-  return numbers.splice(-2);
+  const newNumArr = Array.from(numbers);
+  return newNumArr.splice(-2);
 }
 
 // cars is an array of car objects which look like
@@ -59,10 +50,7 @@ function lastTwo(numbers){
 // }
 // increment the years by one year for all cars
 function incrementYear(cars){
-  for(var i = 0; i < cars.length; i++){
-    cars[i].year++;
-  }
-  return cars;
+  return cars.map(item => Object.assign({},item,{year: item.year+1}));
 }
 
 // sales is an object where the key is
@@ -74,33 +62,28 @@ function incrementYear(cars){
 //   Mary: [57, 12, 31, 4],
 //   Dave: [43, 2, 12]
 // }
-function totalSales( sales ){
-  Object.keys(sales).forEach(function(key){
-    let total = 0;
-
-    for(var i = 0; i < sales[key].length; i++){
-      total = total + sales[key][i];
-    }
-
-    sales[key] = total;
+function totalSales(sales){
+  const newSales = Object.assign({}, sales);
+  Object.keys(newSales).forEach(function(key) {
+     newSales[key] = newSales[key].reduce((acc, current)=> acc + current);
   });
+  return newSales;
 }
+
 // stuff is an object with string keys and
 // string values. All keys and values are unique
 // Swap keys and values around, so that keys
 // become values and values become keys.
 // {
-//   a: 'b',
-//   c: 'd'
+//   key1: 'value1',
+//   key2: 'value2'
 // }
 function swapKeysAndValues(stuff){
-  Object.keys(stuff).forEach(function(key){
-    const value = stuff[key];
-    stuff[value] = key;
-    delete stuff[key];
+  const myStuff = {};
+  Object.keys(stuff).forEach(key => {
+    myStuff[stuff[key]] = key;
   });
-
-  return stuff;
+  return myStuff;
 }
 
 // dates is an array of dates in string format
@@ -110,22 +93,20 @@ function swapKeysAndValues(stuff){
 // Hint: this function has a bug that needs fixing
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
 function parseDates(dates){
-  for(var i = 0; i < dates.length; i++){
-    var dateParts = dates[i].split('-');
 
-    var year = parseInt(dateParts[0]);
-    var month = parseInt(dateParts[1]);
-    var date = parseInt(dateParts[2]);
-
-    dates[i] = new Date(year, month, date);
-  }
-  return dates;
+  return dates.map(date => {
+    const dateParts = date.split('-'); 
+    const year = parseInt(dateParts[0], 10);
+    const month = parseInt(dateParts[1], 10);
+    const day = parseInt(dateParts[2], 10);
+    return new Date(year, month, day);
+  })
 }
 
 // Stretch goal
 
-// write a function stats it should accept 2 parameters
-// 1. A prices array which contains and array of prices
+// write a function called stats which should accept 2 parameters
+// 1. A prices array which contains an array of prices
 // [8, 9, 10, 4]
 // 2. An array of arrays where the inner array contains
 // start and end indexes for which we want to calculate
@@ -150,3 +131,44 @@ function parseDates(dates){
 // Implement a solution using multiple pure functions
 
 // Write a unit test for each function
+function mean(arr) {
+  return arr.reduce((a,b)=>a+b)/arr.length;
+} 
+
+function variance (arr) {
+  const avg = mean(arr);
+  return mean(arr.map(item => (item-avg)**2));
+}
+
+function stats (prices,indices) {
+  const copyPrices = [...prices];
+  const result = [];
+  indices.forEach(index => {
+    const smallPrices = copyPrices.slice(index[0],index[1]+1);
+    const resultObj = {};
+    resultObj.count = smallPrices.length;
+    resultObj.total = smallPrices.reduce((a,b)=>a+b);
+    resultObj.min = Math.min(...smallPrices);
+    resultObj.max = Math.max(...smallPrices);
+    resultObj.mean = mean(smallPrices).toFixed(2);
+    resultObj.variance = (variance(smallPrices)).toFixed(2);
+    resultObj.stdDeviation = (variance(smallPrices)**0.5).toFixed(2);
+    result.push(resultObj);    
+  });
+  console.log(result);  
+  return result;
+}
+
+module.exports = {
+  multiply,
+  absolute,
+  concatNames, 
+  numbersToStrings,
+  sortByLength, 
+  lastTwo,
+  incrementYear, 
+  totalSales,
+  swapKeysAndValues, 
+  parseDates,
+  stats
+};
