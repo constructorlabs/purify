@@ -1,20 +1,31 @@
 // numbers is an array of numbers. Multiply all
 // numbers contained in array by multiplier
-function multiply(numbers, multiplier){
-  for(var i = 0; i < numbers.length; i++){
-    numbers[i] = numbers[i] * multiplier;
+function multiply(numbers, multiplier) {
+  numbersClone = [...numbers];
+  for (var i = 0; i < numbersClone.length; i++) {
+    numbersClone[i] = numbersClone[i] * multiplier;
   }
 
-  return numbers;
+  return numbersClone;
 }
+
+exports.multiply = multiply;
 
 // is an array of positive and negative numbers
 // make them all absolute numbers
-function absolute(numbers){
-  for(var i = 0; i < numbers.length; i++){
-    numbers[i] = +numbers[i];
-  }
+function absolute(numbers) {
+  numbersCopy = numbers.map(function(el) {
+    if (el < 0) {
+      return el * -1;
+    } else {
+      return el;
+    }
+  });
+  return numbersCopy;
 }
+
+exports.absolute = absolute;
+
 // names is an array of name of nameObjects
 // {
 //   firstName: 'Alan',
@@ -22,34 +33,45 @@ function absolute(numbers){
 // }
 // concatenate first and last names and return
 // resulting array of names
-function concatNames(names){
-  for(var i = 0; i < names.length; i++){
-    names[i] = `${names[i].firstName} ${names[i].lastName}`;
+function concatNames(names) {
+  const namesCopy = [...names];
+  for (var i = 0; i < namesCopy.length; i++) {
+    namesCopy[i] = `${namesCopy[i].firstName} ${namesCopy[i].lastName}`;
   }
-  return names;
+  return namesCopy;
 }
+
+exports.concatNames = concatNames;
 
 // things is an array of numbers and strings. Convert
 // numbers in array to strings. For example 5 to "5"
-function numbersToStrings(things){
-  for(var i = 0; i < things.length; i++){
-    things[i] = typeof things[i] === 'number' ? things[i]+'' : things[i];
+function numbersToStrings(things) {
+  const thingsCopy = [...things];
+  for (var i = 0; i < thingsCopy.length; i++) {
+    thingsCopy[i] =
+      typeof thingsCopy[i] === "number" ? thingsCopy[i] + "" : thingsCopy[i];
   }
+  return thingsCopy;
 }
+
+exports.numbersToStrings = numbersToStrings;
 
 // strings is an array of strings. sort them by length
-function sortByLength(strings){
-  strings.sort(function(a,b){
+function sortByLength(strings) {
+  const stringsCopy = [...strings];
+  stringsCopy.sort(function(a, b) {
     return a.length - b.length;
   });
+  return stringsCopy;
 }
-
+exports.sortByLength = sortByLength;
 // numbers is an array of numbers. Get last two numbers
 // from numbers
-function lastTwo(numbers){
-  return numbers.splice(-2);
+function lastTwo(numbers) {
+  const lastCopy = [...numbers];
+  return lastCopy.splice(-2);
 }
-
+exports.lastTwo = lastTwo;
 // cars is an array of car objects which look like
 // this
 // {
@@ -58,33 +80,44 @@ function lastTwo(numbers){
 //   year: 1992
 // }
 // increment the years by one year for all cars
-function incrementYear(cars){
-  for(var i = 0; i < cars.length; i++){
-    cars[i].year++;
-  }
-  return cars;
+function incrementYear(cars) {
+  return cars.map(function(car) {
+    const newCar = Object.assign({}, car);
+    newCar.year++;
+    return newCar;
+  });
+  // const carsCopy = [...cars];
+  // const carsCopy = JSON.parse(JSON.stringify(cars));
+  // for (var i = 0; i < carsCopy.length; i++) {
+  //   carsCopy[i].year++;
+  // }
+  // return carsCopy;
 }
-
+exports.incrementYear = incrementYear;
 // sales is an object where the key is
 // the salespersons name and the value
 // is an array containing that person's sales
-// as integers. Calculate that each person's
+// as integers. Calculate each person's
 // total sales.
 // {
 //   Mary: [57, 12, 31, 4],
 //   Dave: [43, 2, 12]
 // }
-function totalSales( sales ){
-  Object.keys(sales).forEach(function(key){
+function totalSales(sales) {
+  const newSales = Object.assign({}, sales);
+  Object.keys(sales).forEach(function(key) {
     let total = 0;
-
-    for(var i = 0; i < sales[key].length; i++){
-      total = total + sales[key][i];
+    for (var i = 0; i < newSales[key].length; i++) {
+      total = total + newSales[key][i];
     }
 
-    sales[key] = total;
+    newSales[key] = total;
+    return newSales;
   });
+  return newSales;
 }
+
+exports.totalSales = totalSales;
 // stuff is an object with string keys and
 // string values. All keys and values are unique
 // Swap keys and values around, so that keys
@@ -93,34 +126,39 @@ function totalSales( sales ){
 //   a: 'b',
 //   c: 'd'
 // }
-function swapKeysAndValues(stuff){
-  Object.keys(stuff).forEach(function(key){
-    const value = stuff[key];
-    stuff[value] = key;
-    delete stuff[key];
+function swapKeysAndValues(stuff) {
+  const newStuff = Object.assign({}, stuff);
+  Object.keys(stuff).forEach(function(key) {
+    const value = newStuff[key];
+    newStuff[value] = key;
+    delete newStuff[key];
   });
 
-  return stuff;
+  return newStuff;
 }
 
+exports.swapKeysAndValues = swapKeysAndValues;
 // dates is an array of dates in string format
 // 'yyyy-mm-dd' convert dates to date object.
 // For example, '2018-02-12' is 12th Feb 2018
 
 // Hint: this function has a bug that needs fixing
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
-function parseDates(dates){
-  for(var i = 0; i < dates.length; i++){
-    var dateParts = dates[i].split('-');
+function parseDates(dates) {
+  const newDates = [...dates];
+  for (var i = 0; i < newDates.length; i++) {
+    var dateParts = newDates[i].split("-");
 
     var year = parseInt(dateParts[0]);
     var month = parseInt(dateParts[1]);
     var date = parseInt(dateParts[2]);
 
-    dates[i] = new Date(year, month, date);
+    newDates[i] = new Date(date, month, year);
   }
-  return dates;
+  return newDates;
 }
+
+exports.parseDates = parseDates;
 
 // Stretch goal
 
